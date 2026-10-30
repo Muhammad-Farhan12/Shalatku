@@ -22,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.example.shalatku.ui.theme.ShalatkuTheme
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,9 +37,8 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun ShalatkuApp() {
+fun ShalatkuApp(viewModel: SalatKuViewModel = viewModel()) {
     var selected by remember { mutableStateOf(0) }
-    val donePrayers = remember { mutableStateListOf<String>() }
 
     Scaffold(
         bottomBar = {
@@ -66,16 +66,26 @@ fun ShalatkuApp() {
     ) { padding ->
         val contentModifier = Modifier.padding(padding)
         when (selected) {
-            0 -> HomeScreen(samplePrayers, contentModifier)
-            1 -> TrackerScreen(
+            0 -> HomeScreen(
                 prayers = samplePrayers,
-                donePrayers = donePrayers,
-                onToggle = { name ->
-                    if (name in donePrayers) donePrayers.remove(name) else donePrayers.add(name)
-                },
                 modifier = contentModifier
             )
-            2 -> TasbihScreen(contentModifier)
+            1 -> TrackerScreen(
+                prayers = samplePrayers,
+                donePrayers = viewModel.donePrayers,
+                onToggle = viewModel::togglePrayer,
+                onClear = viewModel::clearPrayers,
+                modifier = contentModifier
+            )
+            2 -> TasbihScreen(
+                count = viewModel.tasbihCount,
+                rounds = viewModel.completedRounds,
+                onIncrement = viewModel::incrementTasbih,
+                onReset = viewModel::resetTasbih,
+                onSetTarget = viewModel::updateRoundSize,
+                modifier = contentModifier
+            )
         }
     }
 }
+
