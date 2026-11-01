@@ -21,13 +21,14 @@ import androidx.compose.ui.unit.dp
 fun TasbihScreen(
     count: Int,
     rounds: Int,
+    roundSize: Int,
     onIncrement: () -> Unit,
     onReset: () -> Unit,
-    onSetTarget: (Int) -> Unit,
+    onSelectRoundSize: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier.fillMaxSize().padding(16.dp),
+        modifier = modifier.fillMaxSize().padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -35,16 +36,16 @@ fun TasbihScreen(
         Text("Completed rounds: $rounds", style = MaterialTheme.typography.bodyLarge)
 
         Spacer(Modifier.height(16.dp))
-        Text("$count", style = MaterialTheme.typography.displayLarge)
+        Text("$count / $roundSize", style = MaterialTheme.typography.displayLarge)
         Spacer(Modifier.height(24.dp))
 
         // Tombol Target Tasbih
         Row {
-            Button(onClick = { onSetTarget(33) }) { Text("33") }
+            Button(onClick = { onSelectRoundSize(33) }) { Text("33") }
             Spacer(Modifier.width(8.dp))
-            Button(onClick = { onSetTarget(99) }) { Text("99") }
+            Button(onClick = { onSelectRoundSize(99) }) { Text("99") }
             Spacer(Modifier.width(8.dp))
-            Button(onClick = { onSetTarget(100) }) { Text("100") }
+            Button(onClick = { onSelectRoundSize(100) }) { Text("100") }
         }
 
         Spacer(Modifier.height(16.dp))
